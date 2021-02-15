@@ -55,6 +55,8 @@ class Show(db.Model):
   venue_id = db.Column(db.Integer, db.ForeignKey('Venue.id'), nullable=False)
   artist_id = db.Column(db.Integer, db.ForeignKey('Artist.id'), nullable=False)
   start_time = db.Column(db.DateTime, nullable = False)
+  venue = db.relationship('Venue', backref='Show', lazy=True,cascade="all, delete")
+  artist = db.relationship('Artist', backref='Show', lazy=True,cascade="all, delete")
 
   def __repr__(self):
     return "<Show(artist id='%s', venue id='%s', start time='%s')>" % (self.artist_id, self.venue_id, self.start_time)

@@ -7,7 +7,7 @@ db = SQLAlchemy()
 
 # --------------------Venue Model------------------
 class Venue(db.Model):
-  __tablename__ = 'Venue'
+  __tablename__ = 'venues'
   id = db.Column(db.Integer, primary_key=True)
   name = db.Column(db.String, nullable =False, unique=True)
   city = db.Column(db.String(120), nullable =False)
@@ -21,7 +21,7 @@ class Venue(db.Model):
   seeking_talent = db.Column(db.Boolean, default=False )
   seeking_description = db.Column(db.Text())
 
-  shows = db.relationship('Show', backref='Venue', lazy=True,cascade="all, delete, delete-orphan")
+  shows = db.relationship('Show', backref='venues', lazy=True,cascade="all, delete, delete-orphan")
 
   def __repr__(self):
     return "<Venue(venue id='%s', name='%s', city='%s', genres='%s')>" % (self.id, self.name, self.city,self.genres)
@@ -30,7 +30,7 @@ class Venue(db.Model):
     # TODO: implement any missing fields, as a database migration using Flask-Migrate
 # --------------------Artist Model---------------------
 class Artist(db.Model):
-  __tablename__ = 'Artist'
+  __tablename__ = 'artists'
   id = db.Column(db.Integer, primary_key=True)
   name = db.Column(db.String, nullable =False , unique=True)
   city = db.Column(db.String(120), nullable =False)
@@ -43,20 +43,20 @@ class Artist(db.Model):
   seeking_venue = db.Column(db.Boolean, default=False )
   seeking_description = db.Column(db.Text())
 
-  shows = db.relationship('Show', backref='Artist', lazy=True,cascade="all, delete, delete-orphan")
+  shows = db.relationship('Show', backref='artists', lazy=True,cascade="all, delete, delete-orphan")
 
   def __repr__(self):
     return "<Artist(artist id='%s', name='%s', city='%s')>" % (self.id, self.name, self.city)
 
 # ------------------Show Model---------------------
 class Show(db.Model):
-  __tablename__ = 'Show'
+  __tablename__ = 'shows'
   id = db.Column(db.Integer, primary_key=True)
-  venue_id = db.Column(db.Integer, db.ForeignKey('Venue.id'), nullable=False)
-  artist_id = db.Column(db.Integer, db.ForeignKey('Artist.id'), nullable=False)
+  venue_id = db.Column(db.Integer, db.ForeignKey('venues.id'), nullable=False)
+  artist_id = db.Column(db.Integer, db.ForeignKey('artists.id'), nullable=False)
   start_time = db.Column(db.DateTime, nullable = False)
-  venue = db.relationship('Venue', backref='Show', lazy=True,cascade="all, delete")
-  artist = db.relationship('Artist', backref='Show', lazy=True,cascade="all, delete")
+  venue = db.relationship('Venue', backref='shows', lazy=True,cascade="all, delete")
+  artist = db.relationship('Artist', backref='shows', lazy=True,cascade="all, delete")
 
   def __repr__(self):
     return "<Show(artist id='%s', venue id='%s', start time='%s')>" % (self.artist_id, self.venue_id, self.start_time)
